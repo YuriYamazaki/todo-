@@ -1,6 +1,7 @@
 import React from 'react'
 import TaskItem from './TaskItem'
 import { Task } from '../Types'
+import {CSSTransition,TransitionGroup} from 'react-transition-group'
 
 type Props = {
     tasks: Task[]
@@ -9,35 +10,60 @@ type Props = {
 
 const TaskList: React.FC<Props> = ({ tasks, setTasks }) => {
 
-    const handleDone = (task: Task) => {
-        setTasks(prev => prev.map(t =>
-            t.id === task.id
-                ? { ...task, done: !task.done }
-                : t
-        ))
+    const updateTask = (task: Task) => {
+        setTasks(prev => { 
+            var newTasks = prev.map(t => t.id === task.id
+                ? { ...task }
+                : t)
+            localStorage.setItem("TaskList", JSON.stringify(newTasks))
+            return newTasks
+        })
     }
 
+    const handleDone = (task: Task) => {
+        setTasks(prev => { 
+            var newTasks = prev.map(t => t.id === task.id
+                ? { ...task, done: !task.done }
+                : t)
+            localStorage.setItem("TaskList", JSON.stringify(newTasks))
+            return newTasks
+        })
+    }
+    
     const handleDelete = (task: Task) => {
-        setTasks(prev => prev.filter(t =>
-            t.id !== task.id
-        ))
+        setTasks(prev => {
+            var newTasks = prev.filter(t => t.id !== task.id)
+            localStorage.setItem("TaskList", JSON.stringify(newTasks))
+            return newTasks
+         })
     }
 
 
     return (
         <div className="inner">
             {
-                tasks.length <= 0 ? '登録されたTODOはありません。' :
-                <ul className="task-list">
+                tasks.length <= 0 ? 'There are no tasks to do left.' :
+                <TransitionGroup component="ul" classname="task-list">
+                
                 { tasks.map(task => (
-                    <TaskItem
+                    <CSSTransition
                         key={task.id}
+                        timeout={ {
+                            enter:300,
+                            exit:700
+                        }}
+                        classNames="fade"
+                    >
+                    <TaskItem
                         task={task}
+                        updateTask={updateTask}
                         handleDone={handleDone}
                         handleDelete={handleDelete}
                     />
+                    </CSSTransition>
                 )) }
-                </ul>
+            
+                </TransitionGroup>
             }
         </div>
     )

@@ -115,6 +115,8 @@
   padding-left: 30px;
   position: relative;
   margin-right: 20px;
+  width: 500px;
+  display:inline-block;
 }
 
 .checkbox-label::before {
@@ -127,6 +129,8 @@
   height: 18px;
   border: 1px solid #AFEEEE;
   border-radius: 10px;
+  
+
 }
 
 .checkbox-input:checked + .checkbox-label {
@@ -144,4 +148,29 @@
   transform: rotate(40deg);
   border-bottom: 3px solid #d01137;
   border-right: 3px solid #d01137;
+}
+
+/*Fade*/
+.fade-enter-active{
+  background-color:#ffd700;
+  transition:background-color 300ms ease;
+}
+
+.fade-enter-done{
+  background-color: #d7d2cd 1s;
+}
+
+.fade-exit{
+  background-color: #d86681 ;
+  transition: background-color 700ms;
+}
+
+.fade-exit-active {
+  background-color: transparent ;
+  transition: background-color 700ms ease;
+}
+
+.fade-exit-active  label{
+  opacity:.3;
+  transition: opacity 700ms ease;
 }
